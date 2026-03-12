@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            animation: bgmove 8s ease infinite;
+        }
+
+        @keyframes bgmove {
+            0% {
+                filter: brightness(1)
+            }
+
+            50% {
+                filter: brightness(1.1)
+            }
+
+            100% {
+                filter: brightness(1)
+            }
+        }
+
+        .container {
+            width: 320px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .input-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #1e3c72;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff416c;
+            transform: scale(1.05);
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #1e3c72;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 id="typed"></h2>
+
+        <label>Email</label>
+        <div class="input-box">
+            <input id="email" type="email" placeholder="Enter Email" required>
+        </div>
+
+        <label>Password</label>
+
+        <div class="input-box" style="position: relative; display: flex; align-items: center;">
+            <input id="password" type="password" placeholder="Enter Password" required style="flex:1;">
+            <span id="toggleBtn" onclick="togglePassword()"
+                style="position: absolute; right: 10px; cursor: pointer; user-select: none;">👁️</span>
+        </div>
+
+        <button onclick="login()">Login</button>
+
+        <div class="links">
+            <a href="forgot.html">Forgot?</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+    <script>
+
+        function togglePassword() {
+            const passInput = document.getElementById("password");
+            const btn = document.getElementById("toggleBtn");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                btn.textContent = "🙈";
+            } else {
+                passInput.type = "password";
+                btn.textContent = "👁️";
+            }
+        }
+
+        function validateEmail(email) {
+            return String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        }
+
+        document.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                login();
+            }
+        });
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !validateEmail(email)) {
+                alert("Please, Enter sahi Email!");
+                return;
+            }
+            if (!password) {
+                alert("Password box khaali hai!");
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+
+                    localStorage.setItem('token', data.token);
+
+                    let userData = data.user || data;
+                    if (!userData.email) {
+                        userData.email = email;
+                    }
+
+                    localStorage.setItem('userData', JSON.stringify(userData));
+
+                    alert("Login Successful! 🚀");
+                    window.location.href = "index.html";
+                } else {
+                    alert(data.msg || "Login fail ho gaya!");
+                }
+            } catch (err) {
+                alert("Server connect nahi ho raha! Terminal check karein.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+    <style>
+
+        .buttons a {
+            text-decoration: none;
+            color: #bbb;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .buttons a:hover {
+            color: #ffffff;
+        }
+
+
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #ff416c, #ff4b2b);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .profile-card {
+            width: 340px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: 0.3s;
+        }
+
+        .photo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+
+        .upload-label {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #00c6ff;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            font-size: 16px;
+        }
+
+        h2 {
+            margin: 10px 0;
+        }
+
+        p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .edit-box input {
+            width: 90%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .buttons button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: 0.3s;
+        }
+
+        #editBtn {
+             background: linear-gradient(45deg, #ff416c, #ff4b2b, #1e3c72, #2a5298);
+            color: white;
+        }
+
+        #saveBtn {
+             background: linear-gradient(45deg, #ff416c, #ff4b2b, #1e3c72, #2a5298);
+            color: white;
+        }
+
+        .buttons button:hover,
+        .buttons a:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="profile-card">
+    
+        <div class="photo-container">
+            <img id="profilePic" src="images/image6.jpg" class="profile-pic">
+            <label for="fileInput" class="upload-label" style="cursor:pointer;">📷</label>
+            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+        </div>
+
+        <h2 id="userName">Loading...</h2>
+        <p id="userEmail" style="color: #bbb;">Loading...</p>
+
+        <div class="edit-box">
+            <input type="text" id="editName" placeholder="Edit Name" style="display:none;"
+                oninput="this.value=this.value.replace(/[^a-zA-Z\s]/g,'')">
+        </div>
+
+        <div class="buttons"
+            style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 15px;">
+            <button id="editBtn">Edit Profile</button>
+            <button id="saveBtn" style="display:none;">Save Changes</button>
+            <button id="logoutBtn" onclick="logout()"
+                style="background: linear-gradient(45deg, #ff416c, #ff4b2b, #1e3c72, #2a5298); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Logout</button>
+            <a href="index.html" style="text-decoration: none; color: black; font-size: 14px; margin-top: 5px;">Home
+                page</a>
+        </div>
+    </div>
+
+   <script>
+    const API_URL = "http://localhost:5000";
+
+    // 1. Page Load hote hi ye check chalega
+    window.onload = async function () {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert("Please, Login First!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        try {
+            // Server se fresh data mangwao (Middleware check karega ki user DB mein hai ya nahi)
+            const res = await fetch(`${API_URL}/api/auth/me`, {
+                headers: { 'x-auth-token': token }
+            });
+
+            const userData = await res.json();
+
+            // AGAR SERVER SE 401 AAYA (USER DELETED):
+            if (res.status === 401) {
+                alert("Session Expired or User Deleted! Login again.");
+                logout(); // LocalStorage clear karke login pe phenk do
+                return;
+            }
+
+           // --- YE WALI LINES DALO ---
+const name = userData.name || (userData.user && userData.user.name) || "No Name";
+const email = userData.email || (userData.user && userData.user.email) || "No Email Found";
+
+            document.getElementById('userName').innerText = name;
+            document.getElementById('userEmail').innerText = email;
+            document.getElementById('editName').value = name;
+
+            const picElement = document.getElementById('profilePic');
+            if (userData.profilePic) {
+                picElement.src = userData.profilePic.startsWith('http') ? userData.profilePic : `${API_URL}${userData.profilePic}`;
+            }
+            
+            // LocalStorage update kar do fresh data se
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+        } catch (err) {
+            console.error("Error fetching profile:", err);
+            // Agar server down ho ya error aaye toh purana data dikhao temporary
+            const rawData = localStorage.getItem('userData');
+            if(rawData) {
+                const user = JSON.parse(rawData);
+                document.getElementById('userName').innerText = user.name || "User";
+            }
+        }
+    };
+
+    // 2. Photo Upload Logic (Check added for safety)
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.onchange = async function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('profilePic', file);
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/upload-pic`, {
+                    method: 'POST',
+                    headers: { 'x-auth-token': token },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert("Profile Photo Updated! 🚀");
+                    document.getElementById('profilePic').src = `${API_URL}${data.profilePic}`;
+                } else if (res.status === 401) {
+                    logout();
+                } else {
+                    alert(data.msg || "Upload fail ho gaya");
+                }
+            } catch (err) {
+                alert("Server error during upload!");
+            }
+        };
+    }
+
+    // 3. Edit & Save Logic
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const userNameDisplay = document.getElementById('userName');
+    const editNameInput = document.getElementById('editName');
+
+    if (editBtn) {
+        editBtn.onclick = function () {
+            userNameDisplay.style.display = 'none';
+            editNameInput.style.display = 'block';
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'inline-block';
+            editNameInput.focus();
+        };
+    }
+
+    if (saveBtn) {
+        saveBtn.onclick = async function () {
+            const newName = editNameInput.value.trim();
+            const token = localStorage.getItem('token');
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/update`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
+                    body: JSON.stringify({ name: newName })
+                });
+
+                if (res.ok) {
+                    alert("Profile Name Updated! 🎉");
+                    userNameDisplay.innerText = newName;
+                    userNameDisplay.style.display = 'block';
+                    editNameInput.style.display = 'none';
+                    editBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'none';
+                } else if (res.status === 401) {
+                    logout();
+                }
+            } catch (err) {
+                alert("Server error while updating name!");
+            }
+        };
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userData');
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+
+
+
+</html>

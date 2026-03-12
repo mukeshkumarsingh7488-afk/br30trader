@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reset Password</title>
+<script defer src="script.js"></script>
+<style>
+body{margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#1e3c72,#2a5298);animation:bgmove 8s ease infinite;}
+@keyframes bgmove {0%{filter:brightness(1)}50%{filter:brightness(1.1)}100%{filter:brightness(1)}}
+.container{width:320px;background:#fff;padding:25px;border-radius:15px;box-shadow:0 0 20px rgba(0,0,0,0.3);}
+input{width:100%;padding:8px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;outline:none;}
+button{width:100%;padding:10px;border:none;border-radius:8px;background:#1e3c72;color:white;cursor:pointer;transition:0.3s;}
+button:hover{background:#ff416c;}
+.links{display:flex;justify-content:space-between;margin-top:15px;}
+.links a{text-decoration:none;color:#1e3c72;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Reset Password</h2>
+<input id="email" type="email" placeholder="Enter Email">
+<input id="Otp" placeholder="Enter Otp">
+<input id="newPassword" type="password" placeholder="Enter New Password">
+<button onclick="resetPassword()">Reset Password</button>
+<div class="links"><a href="login.html">Login</a></div>
+</div>
+
+<script>
+    // ===== RESET PASSWORD =====
+function resetPassword() {
+  const email = document.getElementById("email").value;
+  const token = document.getElementById("token").value;
+  const newPassword = document.getElementById("newPassword").value;
+
+  if (!email || !token || !newPassword) {
+    alert("Bhai, saari details bharo!");
+    return;
+  }
+
+  fetch("http://localhost:5000/api/auth/reset-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token, newPassword }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Reset Response:", data);
+      alert(data.msg || data.message || "Password updated!");
+      
+      if (data.success || data.msg === "Password reset successfully") {
+        window.location.href = "login.html";
+      }
+    })
+    .catch((err) => {
+      console.log("Reset Error:", err);
+      alert("Kuch gadbad hai, console check karo!");
+    });
+}
+
+</script>
+</body>
+</html>

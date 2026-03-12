@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <!-- Agar script.js khali hai toh ise hata do, warna conflict hoga -->
+    <!-- <script defer src="script.js"></script> -->
+    <style>
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #1e3c72, #2a5298); animation: bgmove 8s ease infinite; font-family: sans-serif; }
+        @keyframes bgmove { 0% { filter: brightness(1) } 50% { filter: brightness(1.1) } 100% { filter: brightness(1) } }
+        .container { width: 320px; background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+        h2 { text-align: center; color: #1e3c72; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; outline: none; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #1e3c72; color: white; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        button:hover { background: #ff416c; }
+        .links { display: flex; justify-content: center; margin-top: 15px; }
+        .links a { text-decoration: none; color: #1e3c72; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Forgot Password</h2>
+        
+        <!-- Step 1: Email Section -->
+        <div id="email-section">
+            <div class="input-box">
+                <input id="email" type="email" placeholder="Enter Registered Email" required>
+            </div>
+            <button onclick="forgot()">Send OTP</button>
+        </div>
+
+        <!-- Step 2: OTP & Password Section -->
+        <div id="otp-section" style="display: none;">
+            <p style="font-size: 12px; color: #666; text-align: center;">OTP has been sent to your email</p>
+            
+            <div class="input-box">
+                <input id="otp" placeholder="Enter 6-Digit OTP" required>
+            </div>
+
+            <!-- New Password with Eye -->
+            <div class="input-box" style="position: relative; display: flex; align-items: center; margin-bottom: 10px;">
+                <input id="newPassword" type="password" placeholder="New Password (Min 8 chars, 1 Special)" required style="flex:1;">
+                <span onclick="togglePass('newPassword', this)" style="position: absolute; right: 10px; cursor: pointer;">👁️</span>
+            </div>
+
+            <!-- Confirm Password with Eye -->
+            <div class="input-box" style="position: relative; display: flex; align-items: center; margin-bottom: 10px;">
+                <input id="confirmPassword" type="password" placeholder="Confirm Password" required style="flex:1;">
+                <span onclick="togglePass('confirmPassword', this)" style="position: absolute; right: 10px; cursor: pointer;">👁️</span>
+            </div>
+
+            <button onclick="resetPassword()">Reset Password</button>
+        </div>
+
+        <div class="links"><a href="login.html">Back to Login</a></div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000/api/auth";
+
+        // 1. Password Toggle Logic
+        function togglePass(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "🙈";
+            } else {
+                input.type = "password";
+                btn.textContent = "👁️";
+            }
+        }
+
+        // 2. Email Validation
+        function validateEmail(email) {
+            return String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        }
+
+        // 3. ENTER KEY SUPPORT
+        document.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                if (document.getElementById("email-section").style.display !== "none") {
+                    forgot();
+                } else {
+                    resetPassword();
+                }
+            }
+        });
+
+        // ===== STEP 1: SEND OTP =====
+        function forgot() {
+            const email = document.getElementById("email").value;
+            if (!email || !validateEmail(email)) return alert("Wrong Email!");
+
+            fetch(`${API_URL}/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.msg || "OTP bhej diya gaya hai!");
+                if (data.msg && data.msg.toLowerCase().includes("otp")) {
+                    document.getElementById("email-section").style.display = "none";
+                    document.getElementById("otp-section").style.display = "block";
+                }
+            })
+            .catch(err => alert("Connection Error!"));
+        }
+
+        // ===== STEP 2: RESET PASSWORD =====
+        function resetPassword() {
+            const email = document.getElementById("email").value;
+            const otp = document.getElementById("otp").value;
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            // Password Pattern (8 chars, 1 Number, 1 Special Char)
+            const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+            if (!otp) return alert("OTP daalna bhool gaye!");
+            if (!passwordPattern.test(newPassword)) {
+                return alert("Password strong rakho! Kam se kam 8 letters, 1 number aur 1 special character (@, #, $, etc.) hona chahiye.");
+            }
+            if (newPassword !== confirmPassword) return alert("Passwords match nahi ho rahe!");
+
+            fetch(`${API_URL}/reset-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp, newPassword }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.msg);
+                if (data.msg.toLowerCase().includes("success")) {
+                    window.location.href = "login.html";
+                }
+            })
+            .catch(err => alert("Error resetting password!"));
+        }
+    </script>
+</body>
+
+</html>

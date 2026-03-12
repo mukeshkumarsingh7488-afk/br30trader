@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+
+    <style>
+        body {
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            animation: bodyGradient 15s ease infinite;
+            font-family: Arial;
+        }
+
+        @keyframes bodyGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .contact-box {
+
+            width: 60%;
+            margin: 100px auto;
+            padding: 40px;
+
+            text-align: center;
+
+            background: linear-gradient(135deg, #ff512f, #dd2476, #1e3c72, #2a5298);
+            background-size: 300% 300%;
+
+            border-radius: 12px;
+
+            animation: gradient 10s infinite, popup 0.8s ease;
+
+        }
+
+        @keyframes gradient {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+
+        }
+
+        @keyframes popup {
+
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        h1 {
+            color: black;
+        }
+
+        p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background:linear-gradient(45deg,#ff512f,#1e3c72);
+            color: black;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.4s;
+            box-shadow:
+                0 0 15px #ffb700,
+                0 0 30px #ffcf40;
+        }
+
+        .btn:hover {
+            color: black;
+            transform: scale(1.1);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="contact-box">
+
+        <h1>Contact Us</h1>
+
+        <p>Email : support.br30trader@gmail.com</p>
+
+        <p>Phone : +91 7488802267</p>
+
+        <p>Address : Sitamarhi Bihar 843302, India</p>
+        <a href="index.html" class="btn">Back Home</a>
+    </div>
+
+</body>
+
+</html>

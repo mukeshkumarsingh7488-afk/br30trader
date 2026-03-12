@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coures Web</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://checkout.razorpay.com"></script>
+</head>
+
+<body>
+  <header>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="logo-title">
+      <img src="images/BR30TRADER.png" alt="logo" class="logo">
+
+      <h1 class="logo-text">BR30ᴛʀᴀᴅᴇʀ</h1>
+    </div>
+    <div class="welcome trader">
+      <h1>💫 Welcome 💫</h1>
+    </div>
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="profile.html">My Profile</a>
+      <a href="mycourse.html">My Course</a>
+      <a href="https://play.google.com/store/apps/details?id=com.tumhara.app" target="_blank" rel="noopener noreferrer"
+        class="app-btn">Download App</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </nav>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <div class="profile-box">
+      <img src="images/image6.jpg" alt="profile" id="profileImg">
+
+      <h3 id="pname"></h3>
+      <p id="pmobile"></p>
+      <p id="pemail"></p>
+
+      <button class="edit-btn" onclick="openEdit()">Edit Profile</button>
+    </div>
+
+    <a href="index.html">Home</a>
+    <a href="profile.html">Profile</a>
+    <a href="#" onclick="confirmLogout()">Logout</a>
+  </div>
+
+  <div class="hero-video">
+    <video autoplay muted loop>
+      <source src="videos/intro2.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="video-text">
+    Hey, My Name is <span class="purple">Mukesh</span>
+    <div>and I am a passionate</div>
+    <span id="element"></span>
+  </div>
+  <hr>
+  <div class="about-section">
+    <h4>👤 About Me 👤</h4>
+    <p><b>Hey I'm Mukesh, a passionate trader with a strong focus on the financial markets.</b></p>
+    <p><b>Options Trading:</b> I started trading options since [March,2022], exploring strategies, breakouts, and
+      premium
+      behaviors.</p>
+    <p><b>Crypto Trading:</b> I have been involved in crypto trading since [February, 2023], analyzing trends and market
+      patterns.</p>
+    <p><b>Note:</b> <em>My goal is to share knowledge, strategies, and market insights to help others understand
+        trading
+        better.</em></p>
+    <p><b>Any Query: </b> 📧mukeshkumarsingh7488@gmail.com</p>
+  </div>
+  <hr>
+  <div class="youtube-live">
+    <h2>🔴 YouTube Live 🔴</h2>
+    <div class="youtube live">
+      <table>
+        <thead>
+          <tr>
+            <th>Morning Mon to Fri</th>
+            <th>Evening Mon to Fri</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>09:30 to 11:30 AM</td>
+            <td>07:30 to 11:30 PM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <hr>
+  <section class="poster-section" id="postersection">
+    <h2>🎓 Our Course 🎓</h2>
+    <div class="poster-container">
+
+      <div class="poster-card">
+        <img src="images/BR30TRADER.png" alt="Option Buying">
+        <h3>Option Buying</h3>
+        <button type="button" onclick="checkout('69b08c39e9657168f7652962')">Buy</button>
+      </div>
+
+      <div class="poster-card">
+        <img src="images/BR30TRADER.png" alt="Option Selling">
+        <h3>Option Selling</h3>
+        <button type="button" onclick="checkout('69b08a56e9657168f765295b')">Buy</button>
+      </div>
+
+      <div class="poster-card">
+        <img src="images/BR30TRADER.png" alt="BTST">
+        <h3>BTST</h3>
+        <button type="button" onclick="checkout('69b08c8fe9657168f765296a')">Buy</button>
+      </div>
+
+      <div class="poster-card">
+        <img src="images/BR30TRADER.png" alt="Crypto & Forex">
+        <h3>Crypto & Forex</h3>
+        <button type="button" onclick="checkout('69b08cfae9657168f7652973')">Buy</button>
+      </div>
+
+      <div class="poster-card">
+        <img src="images/BR30TRADER.png" alt="One Side Momentum">
+        <h3>One Side Momentum</h3>
+        <button type="button" onclick="checkout('69b08d75e9657168f765297d')">Buy</button>
+      </div>
+
+    </div>
+  </section>
+  <hr>
+
+
+  <section class="course-section">
+
+    <div class="flipbox-left">
+      <div class="flip-box">
+        <div class="flip-box-inner">
+          <div class="flip-box-front">
+            <img src="images/image6.jpg" alt="Course 1 Front">
+          </div>
+          <div class="flip-box-back">
+            <img src="images/BR30TRADER.png" alt="Course 1 Back">
+          </div>
+        </div>
+      </div>
+      <div class="flip-box">
+        <div class="flip-box-inner">
+          <div class="flip-box-front">
+            <img src="images/image6.jpg" alt="Course 2 Front">
+          </div>
+          <div class="flip-box-back">
+            <img src="images/BR30TRADER.png" alt="Course 2 Back">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="course-pdf-section">
+
+      <h2>💯 Free Course PDF 💯</h2>
+      <ol>
+        <li><a href="Course.pdf/✅ 9 EMA + 15 EMA + FVG Trading (Option Buying).txt" target="_blank">✅ 9 EMA + 15 EMA +
+            FVG Trading (Option Buying)</a></li>
+        <li><a href="Course.pdf/✅ 9 EMA + 15 EMA + FVG Trading (Option Selling).txt" target="_blank">✅ 9 EMA + 15 EMA +
+            FVG Trading (Option Selling)</a></li>
+        <li><a href="Course.pdf/✅ Option Greeks.txt" target="_blank">✅ Option Greeks</a></li>
+        <li><a href="Course.pdf/✅ Option Selling with Hedging.txt" target="_blank">✅ Option Selling with Hedging</a>
+        </li>
+        <li><a href="Course.pdf/✅ RSI Divergence क्या होता है.txt" target="_blank">✅ RSI Divergence क्या होता है</a>
+        </li>
+      </ol>
+    </div>
+
+    <div class="flipbox-right">
+      <div class="flip-box">
+        <div class="flip-box-inner">
+          <div class="flip-box-front">
+            <img src="images/image6.jpg" alt="Course 3 Front">
+          </div>
+          <div class="flip-box-back">
+            <img src="images/BR30TRADER.png" alt="Course 3 Back">
+          </div>
+        </div>
+      </div>
+      <div class="flip-box">
+        <div class="flip-box-inner">
+          <div class="flip-box-front">
+            <img src="images/image6.jpg" alt="Course 4 Front">
+          </div>
+          <div class="flip-box-back">
+            <img src="images/BR30TRADER.png" alt="Course 4 Back">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr>
+  <div class="coming-courses-section">
+    <h2>🔥 Coming Course 🔥</h2>
+    <ul>
+      <li>Scalping</li>
+      <li>Price Action</li>
+      <li>Candle Stick Pattern</li>
+      <li>Chart Reading</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="daily-pl-section">
+    <h2>💹 Daily P&L 💹</h2>
+    <div class="pl-links">
+      <a href="https://drive.google.com/file/d/1GoX9r9wojsMHvkEspn1M0SddeJZxkFoW/view?usp=drivesdk" target="_blank"
+        rel="noopener noreferrer">
+        <h3>P&L</h3>
+      </a>
+    </div>
+  </div>
+  <hr>
+  <div class="media">
+    <h3>👇 Follow Me 👇</h3>
+    <div class="social-icons">
+      <a href="https://www.youtube.com/@br30_trader" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-youtube"></i>
+        <p>YouTube</p>
+      </a>
+      <a href="https://www.instagram.com/mukeshraj_7488" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-instagram"></i>
+        <p>Instagram</p>
+      </a>
+      <a href="https://www.facebook.com/share/1AhDBpYv4E/" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-facebook"></i>
+        <p>Facebook</p>
+      </a>
+    </div>
+  </div>
+  <hr>
+  <div class="contact">
+    <h3>📞 Contact 📞</h3>
+    <div class="contact-icons">
+      <a href="https://t.me/br_30trader" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-telegram"></i>
+        <p>Telegram</p>
+      </a>
+      <a href="https://wa.me/7488802267" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp"></i>
+        <p>Whatsapp</p>
+      </a>
+      <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noopener noreferrer">
+        <i class="fa-solid fa-envelope"></i>
+        <p>Gmail</p>
+      </a>
+    </div>
+  </div>
+  <hr>
+
+  <div class="info-section">
+
+    <div class="info-links">
+
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="refund.html">Refund Policy</a>
+
+    </div>
+
+    <div class="disclaimer">
+      <h3>⚠️ Disclaimer ⚠️</h3>
+      <p>I am not SEBI registered. This course or content is provided solely for educational purposes</p>
+      <p>I do not provide any buy/sell advice or any kind of financial service.</p>
+      <p>The stock market is subject to risks, and any investment or trading decisions are made at your own
+        discretion.
+      </p>
+      <p>Before making any investment, it is highly recommended to consult a certified financial advisor.</p>
+      <p>मैं SEBI में पंजीकृत नहीं हूँ। यह पाठ्यक्रम या सामग्री केवल शैक्षिक उद्देश्यों के लिए प्रदान की गई है।</p>
+      <p>मैं किसी भी प्रकार की खरीद-बिक्री संबंधी सलाह या किसी भी प्रकार की वित्तीय सेवा प्रदान नहीं करता हूं।</p>
+      <p>शेयर बाजार जोखिमों के अधीन है, और निवेश या व्यापार से संबंधित कोई भी निर्णय आपके अपने विवेक पर निर्भर करता
+        है।
+      </p>
+      <p>किसी भी प्रकार का निवेश करने से पहले, किसी प्रमाणित वित्तीय सलाहकार से सलाह लेना अत्यंत आवश्यक है।</p>
+      <a href="index.html">Home</a>
+    </div>
+
+    <div class="tips-box">
+
+      <h3>Course Highlights</h3>
+
+      <ul>
+        <li>Beginner to Advanced Trading</li>
+        <li>Live Market Analysis</li>
+        <li>Risk Management Strategy</li>
+        <li>Lifetime Access</li>
+        <li>Support Community</li>
+
+      </ul>
+
+    </div>
+    <script src="https://unpkg.com/typed.js@3.0.0/dist/typed.umd.js"></script>
+
+    <script src="https://cdn.jsdelivr.net"></script>
+    <script>
+      async function checkout(courseId) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert("Bhai, pehle Login kar lo!");
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          const res = await fetch('http://localhost:5000/api/payment/order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-auth-token': token
+            },
+            body: JSON.stringify({ courseId: courseId })
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.msg || "Order fail ho gaya!");
+
+          const options = {
+            "key": "rzp_test_SMoo8eTbcEjuw",
+            "amount": data.order.amount,
+            "currency": "INR",
+            "name": "BR30TRADER",
+            "order_id": data.order.id,
+            "handler": async function (response) {
+              const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-auth-token': token
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  courseId: courseId
+                })
+              });
+
+              if (verifyRes.ok) {
+                alert("Mubarak ho! Course unlock ho gaya.");
+                window.location.href = "yourcourse.html";
+              }
+            },
+            "theme": { "color": "#1e3c72" }
+          };
+
+          const rzp = new Razorpay(options);
+          rzp.open();
+
+        } catch (err) {
+          alert("Problem: " + err.message);
+        }
+      }
+
+    </script>
+
+</body>
+<script src="script.js"></script>
+
+</html>

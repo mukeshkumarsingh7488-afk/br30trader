@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register with OTP</title>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            animation: bgmove 8s ease infinite;
+            font-family: sans-serif;
+        }
+
+        @keyframes bgmove {
+            0% {
+                filter: brightness(1)
+            }
+
+            50% {
+                filter: brightness(1.1)
+            }
+
+            100% {
+                filter: brightness(1)
+            }
+        }
+
+        .container {
+            width: 350px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e3c72;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .input-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #1e3c72;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff416c;
+            transform: scale(1.02);
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: #1e3c72;
+            font-size: 14px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 id="typed"></h2>
+
+        <!-- Step 1: Registration Form -->
+        <div id="register-section">
+            <label>Username</label>
+            <div class="input-box">
+                <!-- Name validation: Numbers block honge -->
+                <input id="username" placeholder="Enter name" required oninput="this.value=this.value.replace(/[^a-zA-Z\s]/g,'')">
+            </div>
+            
+            <label>Email</label>
+            <div class="input-box">
+                <input id="email" type="email" placeholder="Enter Email" required>
+            </div>
+            
+            <label>Password</label>
+            <div class="input-box" style="position: relative; display: flex; align-items: center;">
+                <input id="password" type="password" placeholder="Min 8 chars, 1 Special (@#$)" required style="flex:1;">
+                <!-- Eye Button Add-on -->
+                <span id="toggleBtn" onclick="togglePassword()" style="position: absolute; right: 10px; cursor: pointer; user-select: none;">👁️</span>
+            </div>
+            
+            <button onclick="register()">Send Verification OTP</button>
+        </div>
+
+        <!-- Step 2: OTP Verification Form -->
+        <div id="otp-section" style="display: none;">
+            <p style="text-align: center; font-size: 13px; color: #666;">Verification code sent to your email.</p>
+            <label>Enter 6-Digit OTP</label>
+            <div class="input-box"><input id="otp" placeholder="Ex: 123456" required></div>
+            <button onclick="verifyOTP()">Verify & Complete Register</button>
+        </div>
+
+        <div class="links"><a href="login.html">Already have an account? Login</a></div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000/api/auth";
+
+        // 1. Password Toggle Logic
+        function togglePassword() {
+            const passInput = document.getElementById("password");
+            const btn = document.getElementById("toggleBtn");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                btn.textContent = "🙈";
+            } else {
+                passInput.type = "password";
+                btn.textContent = "👁️";
+            }
+        }
+
+        // 2. Email Validation Logic
+        function validateEmail(email) {
+            return String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        }
+
+        // 3. ENTER KEY SUPPORT (Add-on)
+        document.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                // Check karo kaunsa section dikh raha hai
+                if (document.getElementById("register-section").style.display !== "none") {
+                    register();
+                } else {
+                    verifyOTP();
+                }
+            }
+        });
+
+        // ===== 1. INITIAL REGISTER (SEND OTP) =====
+        function register() {
+            const name = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Special Character & Length Logic (Add-on)
+            const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+            if (!name) return alert("Plese, Enter Name!");
+            if (!email || !validateEmail(email)) return alert("Plese, Enter Sahi Email!");
+            
+            if (!password) {
+                return alert("Plese, Enter Password!");
+            } else if (!passwordPattern.test(password)) {
+                return alert("Keep your password strong! It must contain at least 8 letters, 1 number, and 1 special character (@, #, $, etc.).");
+            }
+
+            fetch(`${API_URL}/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password }),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.msg || "OTP bhej diya gaya hai!");
+                    if (data.msg && data.msg.toLowerCase().includes("otp")) {
+                        document.getElementById("register-section").style.display = "none";
+                        document.getElementById("otp-section").style.display = "block";
+                    }
+                })
+                .catch(err => alert("Server Error! Terminal check karo."));
+        }
+
+        // ===== 2. VERIFY OTP & FINALIZE =====
+        function verifyOTP() {
+            const email = document.getElementById("email").value;
+            const otp = document.getElementById("otp").value;
+
+            if (!otp) return alert("OTP toh daal bhai!");
+
+            fetch(`${API_URL}/verify-otp`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, otp }),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.msg);
+                    if (data.msg.toLowerCase().includes("success")) {
+                        window.location.href = "login.html";
+                    }
+                })
+                .catch(err => alert("Verification error!"));
+        }
+    </script>
+</body>
+
+</html>

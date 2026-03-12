@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            animation: bodyGradient 15s ease infinite;
+            font-family: Arial;
+        }
+
+        @keyframes bodyGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .box {
+
+            width: 70%;
+            margin: 80px auto;
+            padding: 40px;
+
+            text-align: center;
+
+            background: linear-gradient(135deg, #ff512f, #dd2476, #1e3c72, #2a5298);
+            background-size: 300% 300%;
+
+            border-radius: 12px;
+
+            animation: gradient 10s infinite, popup 0.8s ease;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+        }
+
+        @keyframes gradient {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+
+        }
+
+        @keyframes popup {
+
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+
+        h1 {
+            color: black;
+            font-size: 30px;
+        }
+
+        p {
+            color: white;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background:linear-gradient(45deg,#ff512f,#1e3c72);
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: 0.4s;
+            box-shadow:
+                0 0 15px #ffb700,
+                0 0 30px #ffcf40;
+        }
+
+        .btn:hover {
+            color: black;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+
+        <h1>Privacy Policy</h1>
+
+        <p>
+            We respect your privacy and protect your personal information.
+        </p>
+
+        <p>
+            User data such as name, email and payment details are used
+            only for account creation and service delivery.
+        </p>
+
+        <p>
+            We never sell or share personal information with third parties
+            except for payment processing or legal requirements.
+        </p>
+        <a href="index.html" class="btn">Back Home</a>
+    </div>
+
+</body>
+
+</html>

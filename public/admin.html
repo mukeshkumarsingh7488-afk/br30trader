@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - BR30Trader</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: black;
+            border-radius: 12px;
+        }
+
+        .form-section {
+            background: rgb(59, 97, 59);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #1e3c72;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #2a5298;
+        }
+
+        .success-msg {
+            color: white(203, 21, 118);
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <h1>🚀 Admin Dashboard (BR30Trader)</h1>
+
+        <div class="form-section">
+            <h2>1. Create New Course</h2>
+            <form id="courseForm">
+                <div class="form-group">
+                    <label>Course Title</label>
+                    <input type="text" id="title" placeholder="e.g. Option Buying" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Price (INR)</label>
+                    <input type="number" id="price" placeholder="999" required>
+                </div>
+                <div class="form-group">
+                    <label>Thumbnail Image</label>
+                    <input type="file" id="thumbnail" accept="image/*" required>
+                </div>
+                <button type="submit">Create Course</button>
+                <p id="courseMsg" class="success-msg">Course Created Successfully 🚀</p>
+            </form>
+        </div>
+
+        <div class="form-section">
+            <h2>2. Add Videos to Course</h2>
+            <form id="videoForm">
+                <div class="form-group">
+                    <label>Select Course</label>
+                    <select id="courseSelect" required>
+                        <option value="">Loading Courses...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Video Title</label>
+                    <input type="text" id="videoTitle" placeholder="e.g. Intro to Trading" required>
+                </div>
+                <div class="form-group">
+                    <label>Video URL (YouTube/Drive Link)</label>
+                    <input type="text" id="videoUrl" placeholder="https://..." required>
+                </div>
+                <button type="submit">Add Video</button>
+                <p id="videoMsg" class="success-msg">Video Added Successfully 🎬</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Admin Login Required!");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById('courseForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('thumbnail', document.getElementById('thumbnail').id === 'thumbnail' ? document.getElementById('thumbnail').files[0] : '');
+
+            const res = await fetch('http://localhost:5000/api/courses/add', {
+                method: 'POST',
+                headers: { 'x-auth-token': token },
+                body: formData
+            });
+
+            if (res.ok) {
+                document.getElementById('courseMsg').style.display = 'block';
+                loadCourses();
+            } else {
+                alert("Error creating course!");
+            }
+        };
+
+        async function loadCourses() {
+            const res = await fetch('http://localhost:5000/api/courses');
+            const courses = await res.json();
+            const select = document.getElementById('courseSelect');
+            select.innerHTML = '<option value="">-- Choose Course --</option>';
+            courses.forEach(c => {
+                select.innerHTML += `<option value="${c._id}">${c.title}</option>`;
+            });
+        }
+
+        document.getElementById('videoForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const courseId = document.getElementById('courseSelect').value;
+            const videoData = {
+                title: document.getElementById('videoTitle').value,
+                videoUrl: document.getElementById('videoUrl').value
+            };
+
+            const res = await fetch(`http://localhost:5000/api/courses/add-video/${courseId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token
+                },
+                body: JSON.stringify(videoData)
+            });
+
+            if (res.ok) {
+                document.getElementById('videoMsg').style.display = 'block';
+                document.getElementById('videoForm').reset();
+            }
+        };
+
+        window.onload = loadCourses;
+    </script>
+</body>
+
+</html>
